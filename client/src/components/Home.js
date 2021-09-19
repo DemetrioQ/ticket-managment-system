@@ -12,7 +12,7 @@ function Home(props) {
   const [ticketForEdit, setTicketForEdit] = useState(null);
   const [tickets, setTickets] = useState(null);
   const [deleting, setDeleting] = useState(false);
-
+  
   const fetchUserDetails = useCallback(() => {
     Axios.get('/me', {
       withCredentials: true,
@@ -181,17 +181,16 @@ function Home(props) {
           <table className='table table-striped'>
             <thead>
               <tr>
-                <th style={{ width: '10%' }}>Id</th>
                 <th style={{ width: '30%' }}>Title</th>
                 <th style={{ width: '30%' }}>Description</th>
                 <th style={{ width: '30%' }}>Priority</th>
+                <th style={{ width: '10%' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {tickets &&
                 tickets.map((ticket) => (
                   <tr key={ticket.id}>
-                    <td>{ticket.id}</td>
                     <td>{ticket.title}</td>
                     <td>{ticket.description}</td>
                     <td>{ticket.Priority.priority}</td>
