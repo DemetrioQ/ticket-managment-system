@@ -7,7 +7,6 @@ import RegisterForm from './components/Forms/RegisterForm';
 import Loader from './Loader';
 import Axios from 'axios';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import TicketForm from './components/Forms/TicketForm';
 import { Nav } from './components/Nav';
 
 function App() {
