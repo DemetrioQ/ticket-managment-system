@@ -10,9 +10,11 @@ module.exports = (app) => {
   const User = require('../models').User;
   const Priority = require('../models').Priority;
 
-  app.get('*', (req, res) => {
+  app.get('/home', (req, res) => {
     res.sendfile(path.join(__dirname, '../../client/build', 'index.html'));
   });
+  
+  
 
   app.post('/register', (req, res) => {
     userController.InsertUser(req, res);
