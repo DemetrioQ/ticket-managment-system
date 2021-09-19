@@ -19,7 +19,7 @@ require('./auth');
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.json());
-app.use(express.static(path.resolve(__dirname, '../client/public')));
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const whitelist = process.env.WHITELISTED_DOMAINS ? process.env.WHITELISTED_DOMAINS.split(',') : [];
