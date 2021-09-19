@@ -51,7 +51,6 @@ module.exports = (app) => {
   });
 
   app.get('/me', verifyUser, (req, res, next) => {
-    console.log(req.user);
     res.send(req.user);
   });
 

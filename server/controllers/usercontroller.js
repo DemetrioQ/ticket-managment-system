@@ -15,12 +15,6 @@ exports.InsertUser = (req, res) => {
   };
 
   User.create(user)
-    .then((user) => {
-      const token = getToken({ _id: user.id });
-      const refreshToken = getRefreshToken({ _id: user.id });
-      res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-      res.send({ success: true, token });
-    })
     .catch((err) => {
       res.status(500).send({
         message: err.message || 'Some error occurred while creating the User.',
