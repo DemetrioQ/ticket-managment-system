@@ -83,7 +83,7 @@ function RegisterForm() {
                 <TextField onChange={(event) => setUserPassword(event.target.value)} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
               </Grid>
             </Grid>
-            <Button type='submit' onClick={Register} fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button onClick={Register} fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign Up
             </Button>
           </Box>

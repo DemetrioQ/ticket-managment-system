@@ -13,8 +13,9 @@ module.exports = (app) => {
   app.get('/home', (req, res) => {
     res.sendfile(path.join(__dirname, '../../client/build', 'index.html'));
   });
-  
-  
+  app.get('/', (req, res) => {
+    res.sendfile(path.join(__dirname, '../../client/build', 'index.html'));
+  });
 
   app.post('/register', (req, res) => {
     userController.InsertUser(req, res);
