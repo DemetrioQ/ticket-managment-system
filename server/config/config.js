@@ -2,7 +2,6 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const env = process.env;
 
-
 module.exports = {
   development: {
     host: env.DB_HOST,
@@ -21,12 +20,13 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    username: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: 'ticket_system_db',
+    use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
-    use_env_variable: "DATABASE_URL",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
+      },
+    },
   },
 };
