@@ -25,8 +25,8 @@ module.exports = {
     port: env.DB_PORT,
     username: env.DB_USER,
     password: env.DB_PASSWORD,
-    database: 'ticketsystem_prod',
+    database: 'ticket_system_db',
     dialect: 'postgres',
-    use_env_variable: env.DATABASE_URL,
+    use_env_variable: "DATABASE_URL",
   },
 };
