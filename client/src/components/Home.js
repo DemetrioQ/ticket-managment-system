@@ -4,8 +4,7 @@ import Popup from './Popup';
 import TicketForm from './Forms/TicketForm';
 import { UserContext } from '../context/UserContext';
 import Loader from '../Loader';
-import { Button, Card } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
+import { Button } from '@blueprintjs/core';
 
 function Home(props) {
   const [userContext, setUserContext] = useContext(UserContext);
@@ -43,7 +42,7 @@ function Home(props) {
     });
   }, [setUserContext, userContext.token]);
 
-  const fetchTickets = useCallback(() => {
+  const fetchTickets = () => {
     Axios.get('/user/tickets', {
       withCredentials: true,
       // Pass authentication token as bearer token in header
@@ -66,9 +65,6 @@ function Home(props) {
         setTickets(data);
       } else {
         if (response.status === 401) {
-          // Edge case: when the token has expired.
-          // This could happen if the refreshToken calls have failed due to network error or
-          // User has had the tab open from previous day and tries to click on the Fetch button
           window.location.reload();
         } else {
           setUserContext((oldValues) => {
@@ -77,7 +73,7 @@ function Home(props) {
         }
       }
     });
-  }, [setTicketForEdit, tickets]);
+  };
 
   const createTicket = (ticket) => {
     Axios.post(
@@ -189,7 +185,6 @@ function Home(props) {
                 <th style={{ width: '30%' }}>Title</th>
                 <th style={{ width: '30%' }}>Description</th>
                 <th style={{ width: '30%' }}>Priority</th>
-                <th style={{ width: '30%' }}></th>
               </tr>
             </thead>
             <tbody>
