@@ -12,7 +12,7 @@ import { useState, useContext } from 'react';
 import Axios from 'axios';
 import { UserContext } from '../../context/UserContext';
 import Alert from '@mui/material/Alert';
-import { Collapse } from '@material-ui/core';
+import Collapse from '@mui/material/Collapse';
 
 const theme = createTheme();
 
@@ -36,9 +36,9 @@ function RegisterForm() {
     )
       // , {withCredentials: true, credentials: 'include'})
       .then(async (res) => {
-        setOpen(true)
-        setUserName('')
-        setUserEmail('')
+        setOpen(true);
+        setUserName('');
+        setUserEmail('');
         setUserPassword('');
         setUserContext((oldValues) => {
           return { ...oldValues, token: res.data.token };
@@ -67,8 +67,13 @@ function RegisterForm() {
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
         <Collapse in={open}>
-          <Alert severity='success' variant='outlined' onClose={() => {setOpen(false)}}>
-            This is a success alert — check it out!
+          <Alert
+            severity='success'
+            variant='outlined'
+            onClose={() => {
+              setOpen(false);
+            }}>
+            User registered
           </Alert>
         </Collapse>
         <CssBaseline />
@@ -86,13 +91,13 @@ function RegisterForm() {
           <Box component='form' noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserName(event.target.value)} required fullWidth id='username' label='Username' name='username' autoComplete='username' />
+                <TextField onChange={(event) => setUserName(event.target.value)} value={userName} required fullWidth id='username' label='Username' name='username' autoComplete='username' />
               </Grid>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserEmail(event.target.value)} required fullWidth id='email' label='Email Address' name='email' autoComplete='email' />
+                <TextField onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' name='email' autoComplete='email' />
               </Grid>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserPassword(event.target.value)} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
+                <TextField onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
               </Grid>
             </Grid>
             <Button onClick={Register} fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
