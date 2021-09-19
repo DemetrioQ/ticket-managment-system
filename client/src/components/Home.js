@@ -10,11 +10,9 @@ import { Link } from 'react-router-dom';
 function Home(props) {
   const [userContext, setUserContext] = useContext(UserContext);
   const [openPopup, setOpenPopup] = useState(false);
-  const [recordForEdit, setRecordForEdit] = useState(null);
+  const [ticketForEdit, setTicketForEdit] = useState(null);
   const [tickets, setTickets] = useState(null);
-  const state = {
-    items: [],
-  };
+  const [deleting, setDeleting] = useState(false);
 
   const fetchUserDetails = useCallback(() => {
     Axios.get('/me', {
@@ -56,6 +54,15 @@ function Home(props) {
     }).then(async (response) => {
       if (response.status === 200) {
         const data = response.data;
+        data.sort((a, b) => {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+          return 0;
+        });
         setTickets(data);
       } else {
         if (response.status === 401) {
@@ -70,7 +77,76 @@ function Home(props) {
         }
       }
     });
-  }, [setTickets, tickets]);
+  }, [setTicketForEdit, tickets]);
+
+  const createTicket = (ticket) => {
+    Axios.post(
+      '/ticket',
+      { title: ticket.title, description: ticket.description, priority: ticket.priority },
+      {
+        withCredentials: true,
+        // Pass authentication token as bearer token in header
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
+    ).catch((err) => {
+      console.log(err);
+    });
+  };
+  const updateTicket = (ticket) => {
+    console.log(ticket);
+    Axios.put(
+      '/ticket',
+      { id: ticket.id, title: ticket.title, description: ticket.description, priority: ticket.priority },
+      {
+        withCredentials: true,
+        // Pass authentication token as bearer token in header
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
+    ).catch((err) => {
+      console.log(err);
+    });
+  };
+
+  //Finish add, remove, update tickets
+  const deleteTicket = (ticket_id) => {
+    setDeleting(true);
+    Axios.post(
+      '/ticket/delete',
+      { id: ticket_id },
+      {
+        withCredentials: true,
+        // Pass authentication token as bearer token in header
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
+    )
+      .then((res) => {
+        setDeleting(false);
+        fetchTickets();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addOrEdit = (ticket) => {
+    if (ticket.id === 0) {
+      createTicket(ticket);
+    } else {
+      updateTicket(ticket);
+    }
+    setTicketForEdit(null);
+    setOpenPopup(false);
+    fetchTickets();
+  };
 
   useEffect(() => {
     // fetch only when user details are not present
@@ -85,25 +161,6 @@ function Home(props) {
     }
   });
 
-  const refetchHandler = () => {
-    // set details to undefined so that spinner will be displayed and
-    //  fetchUserDetails will be invoked from useEffect
-    setUserContext((oldValues) => {
-      return { ...oldValues, details: undefined };
-    });
-  };
-
-  //Finish add, remove, update tickets
-  const deleteTicket = (ticket_id) => {};
-
-  const addOrEdit = (ticket, resetForm) => {
-    if (ticket.id == 0) {
-      console.log('creating ticket');
-    } else console.log('uptading ticket');
-    resetForm();
-    setRecordForEdit(null);
-    setOpenPopup(false);
-  };
   return userContext.details === null ? (
     'Error Loading User details'
   ) : !userContext.details ? (
@@ -120,56 +177,64 @@ function Home(props) {
           style={{ float: 'right' }}
           onClick={() => {
             setOpenPopup(true);
-            setRecordForEdit(null);
+            setTicketForEdit(null);
           }}>
           Add Ticket
         </Button>
-        <table className='table table-striped'>
-          <thead>
-            <tr>
-              <th style={{ width: '10%' }}>Id</th>
-              <th style={{ width: '30%' }}>Title</th>
-              <th style={{ width: '30%' }}>Description</th>
-              <th style={{ width: '30%' }}>Priority</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets &&
-              tickets.map((ticket) => (
-                <tr key={ticket.id}>
-                  <td>{ticket.id}</td>
-                  <td>{ticket.title}</td>
-                  <td>{ticket.description}</td>
-                  <td>{ticket.Priority.priority}</td>
-                  <td style={{ whiteSpace: 'nowrap' }}>
-                    <Link to={`/edit/${ticket.id}`} className='btn btn-sm btn-primary mr-1'>
-                      Edit
-                    </Link>
-                    <button onClick={() => deleteTicket(ticket.id)} className='btn btn-sm btn-danger btn-delete-user' disabled={tickets.isDeleting}>
-                      {ticket.isDeleting ? <span className='spinner-border spinner-border-sm'></span> : <span>Delete</span>}
-                    </button>
+        <div className='table-wrapper-scroll-y my-custom-scrollbar'>
+          <table className='table table-striped'>
+            <thead>
+              <tr>
+                <th style={{ width: '10%' }}>Id</th>
+                <th style={{ width: '30%' }}>Title</th>
+                <th style={{ width: '30%' }}>Description</th>
+                <th style={{ width: '30%' }}>Priority</th>
+                <th style={{ width: '30%' }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {tickets &&
+                tickets.map((ticket) => (
+                  <tr key={ticket.id}>
+                    <td>{ticket.id}</td>
+                    <td>{ticket.title}</td>
+                    <td>{ticket.description}</td>
+                    <td>{ticket.Priority.priority}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <Button
+                        className='btn btn-sm btn-primary mr-1'
+                        onClick={() => {
+                          setOpenPopup(true);
+                          setTicketForEdit(ticket);
+                        }}>
+                        Edit
+                      </Button>
+                      <Button onClick={() => deleteTicket(ticket.id)} className='btn btn-sm btn-danger' disabled={deleting}>
+                        {deleting ? <span className='spinner-border spinner-border-sm'></span> : <span>Delete</span>}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              {!tickets && (
+                <tr>
+                  <td colSpan='4' className='text-center'>
+                    <div className='spinner-border spinner-border-lg align-center'></div>
                   </td>
                 </tr>
-              ))}
-            {!tickets && (
-              <tr>
-                <td colSpan='4' className='text-center'>
-                  <div className='spinner-border spinner-border-lg align-center'></div>
-                </td>
-              </tr>
-            )}
-            {tickets && !tickets.length && (
-              <tr>
-                <td colSpan='4' className='text-center'>
-                  <div className='p-2'>No Tickets to display </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+              {tickets && !tickets.length && (
+                <tr>
+                  <td colSpan='4' className='text-center'>
+                    <div className='p-2'>No Tickets to display </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       <Popup title='Ticket Form' openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        <TicketForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+        <TicketForm ticketForEdit={ticketForEdit} addOrEdit={addOrEdit} />
       </Popup>
     </>
   );

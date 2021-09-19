@@ -1,17 +1,14 @@
-const priority = require('../models/priority.js');
-const user = require('../models/user.js');
-
 module.exports = (app) => {
   const passport = require('passport');
   const aut = require('../auth.js');
   const userController = require('../controllers/usercontroller');
+  const ticketController = require('../controllers/ticketcontroller');
   const path = require('path');
   const { getToken, COOKIE_OPTIONS, getRefreshToken, verifyUser } = require('../auth.js');
   const jwt = require('jsonwebtoken');
   const Ticket = require('../models').Ticket;
   const User = require('../models').User;
   const Priority = require('../models').Priority;
-
 
   app.post('/register', (req, res) => {
     userController.InsertUser(req, res);
@@ -66,7 +63,7 @@ module.exports = (app) => {
         {
           model: Priority,
           required: true,
-          attributes: ['priority'],
+          attributes: ['priority', 'id'],
         },
       ],
       attributes: ['id', 'title', 'description'],
@@ -83,11 +80,23 @@ module.exports = (app) => {
       .catch((err) => console.log(err));
   });
 
-
   app.get('/logout', verifyUser, (req, res, next) => {
     const { signedCookies = {} } = req;
     const { refreshToken } = signedCookies;
     res.clearCookie('refreshToken', COOKIE_OPTIONS);
     res.send({ success: true });
+  });
+
+  app.post('/ticket', verifyUser, (req, res, next) => {
+    ticketController.CreateTicket(req, res);
+  });
+
+  app.put('/ticket', verifyUser, (req, res, next) => {
+    console.log(req.body.ticket);
+    ticketController.UpdateTicket(req, res);
+  });
+
+  app.post('/ticket/delete', verifyUser, (req, res, next) => {
+    ticketController.DeleteTicket(req, res);
   });
 };

@@ -22,7 +22,6 @@ function App() {
         'Content-Type': 'application/json',
       },
     }).then(async (res) => {
-      console.log('Response: ' + res);
       if (res.status === 200) {
         const data = res.data;
         setUserContext((oldValues) => {
@@ -48,6 +47,15 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('storage', syncLogout);
+    return () => {
+      window.removeEventListener('storage', syncLogout);
+    };
+  }, [syncLogout]);
+  
+
+
   return userContext.token === undefined || userContext.token === null ? (
     <>
       <Switch>
@@ -65,10 +73,10 @@ function App() {
     </>
   ) : userContext.token ? (
     <>
-    <Nav/>
+      <Nav />
       <Switch>
         <Route path='/home'>
-          <Home />
+          <Home refresh={verifyUser} />
         </Route>
       </Switch>
       <Redirect

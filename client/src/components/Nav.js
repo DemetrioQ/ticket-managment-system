@@ -27,7 +27,7 @@ function Nav() {
         <NavLink exact to='/home' className='nav-item nav-link'>
           Home
         </NavLink>
-        <NavLink exact to='/logout' className='nav-item nav-link' onClick={logoutHandler} style={{ 'margin-left': 'auto' }}>
+        <NavLink exact to='/logout' className='nav-item nav-link' onClick={logoutHandler} style={{ 'marginLeft': 'auto' }}>
           Logout
         </NavLink>
       </div>

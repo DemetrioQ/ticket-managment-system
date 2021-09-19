@@ -18,14 +18,54 @@ import NativeSelect from '@mui/material/NativeSelect';
 
 const theme = createTheme();
 
+
 function TicketForm(props) {
+  const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState();
-  const handleSubmit = (e) => {
-    console.log('hi');
+  const [priority, setPriority] = useState(1);
+  const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
+
+  const { addOrEdit, ticketForEdit } = props;
+
+  const SubmitTicket = () => {
+    if (titleError || descriptionError) {
+    } else {
+      const values = {
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+      };
+      addOrEdit(values);
+    }
   };
-  const addTicket = (e) => {};
+
+  useEffect(() => {
+    if (ticketForEdit != null) {
+      setId(ticketForEdit.id);
+      setTitle(ticketForEdit.title);
+      setDescription(ticketForEdit.description);
+      setPriority(ticketForEdit.Priority.id);
+    }
+  }, [ticketForEdit]);
+
+  useEffect(() => {
+    if (title === '') {
+      setTitleError(true);
+    } else {
+      setTitleError(false);
+    }
+  }, [title, setTitle]);
+
+  useEffect(() => {
+    if (description === '') {
+      setDescriptionError(true);
+    } else {
+      setDescriptionError(false);
+    }
+  }, [description, setDescription]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -37,7 +77,7 @@ function TicketForm(props) {
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-          <Box component='form' onSubmit={handleSubmit} noValidate>
+          <Box component='form'>
             <TextField
               margin='normal'
               required
@@ -46,9 +86,11 @@ function TicketForm(props) {
               label='Title'
               name='tile'
               autoFocus
+              value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
+              error={titleError}
             />
             <TextField
               margin='normal'
@@ -59,9 +101,11 @@ function TicketForm(props) {
               id='description'
               multiline
               rows={4}
+              value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
+              error={descriptionError}
             />
             <InputLabel id='priority-label'>Priority</InputLabel>
             <NativeSelect
@@ -79,8 +123,8 @@ function TicketForm(props) {
               <option value={3}>Medium</option>
               <option value={4}>High</option>
             </NativeSelect>
-            <Button type='submit' fullWidth variant='contained' style={{ 'margin-top': '10%' }}>
-              Add
+            <Button fullWidth variant='contained' style={{ 'margin-top': '10%' }} onClick={SubmitTicket}>
+              Submit
             </Button>
           </Box>
         </Box>
