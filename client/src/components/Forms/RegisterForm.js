@@ -11,6 +11,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useContext } from 'react';
 import Axios from 'axios';
 import { UserContext } from '../../context/UserContext';
+import Alert from '@mui/material/Alert';
+import { Collapse } from '@material-ui/core';
 
 const theme = createTheme();
 
@@ -19,6 +21,7 @@ function RegisterForm() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userContext, setUserContext] = useContext(UserContext);
+  const [open, setOpen] = React.useState(false);
 
   const Register = () => {
     Axios.post(
@@ -33,6 +36,10 @@ function RegisterForm() {
     )
       // , {withCredentials: true, credentials: 'include'})
       .then(async (res) => {
+        setOpen(true)
+        setUserName('')
+        setUserEmail('')
+        setUserPassword('');
         setUserContext((oldValues) => {
           return { ...oldValues, token: res.data.token };
         });
@@ -59,6 +66,11 @@ function RegisterForm() {
     // </>
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
+        <Collapse in={open}>
+          <Alert severity='success' variant='outlined' onClose={() => {setOpen(false)}}>
+            This is a success alert — check it out!
+          </Alert>
+        </Collapse>
         <CssBaseline />
         <Box
           sx={{
