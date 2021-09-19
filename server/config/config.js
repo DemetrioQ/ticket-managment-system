@@ -27,5 +27,6 @@ module.exports = {
     password: env.DB_PASSWORD,
     database: 'ticketsystem_prod',
     dialect: 'postgres',
+    use_env_variable: env.DATABASE_URL,
   },
 };

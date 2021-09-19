@@ -10,6 +10,10 @@ module.exports = (app) => {
   const User = require('../models').User;
   const Priority = require('../models').Priority;
 
+  app.get('*', (req,res) =>{
+    
+  })
+  
   app.post('/register', (req, res) => {
     userController.InsertUser(req, res);
   });

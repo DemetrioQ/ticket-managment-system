@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "build": "cd client && npm install && npm run build",
+    "build:ui": "rm -rf build && cd client && npm run build --prod && cp -r build ../",
     "db:create": "cd server && sequelize-cli db:create",
     "db:migrate": "cd server && sequelize-cli db:migrate",
     "db:g:migration": "cd server && sequelize-cli migration:generate --name",

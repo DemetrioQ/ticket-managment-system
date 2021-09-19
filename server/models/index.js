@@ -15,19 +15,6 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// const models = [require('./ticket')(sequelize, Sequelize), require('./user')(sequelize, Sequelize)];
-
-// models.forEach((model) => {
-//   db[model.name] = model;
-// });
-
-// models.forEach((model) => {
-//   if (db[model.name].associate) {
-//     console.log('entered', model.name);
-//     db[model.name].associate(db);
-//   }
-// });
-
 fs.readdirSync(__dirname)
   .filter((file) => {
     return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
