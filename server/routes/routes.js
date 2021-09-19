@@ -10,10 +10,6 @@ module.exports = (app) => {
   const User = require('../models').User;
   const Priority = require('../models').Priority;
 
-  app.get('*', (req,res) =>{
-    
-  })
-  
   app.post('/register', (req, res) => {
     userController.InsertUser(req, res);
   });
@@ -26,14 +22,11 @@ module.exports = (app) => {
   });
 
   app.post('/refreshToken', (req, res, next) => {
-    console.log('looking...');
     const { signedCookies = {} } = req;
-    console.log(signedCookies);
     const { refreshToken } = signedCookies;
     if (refreshToken) {
       try {
         const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-        console.log(payload);
 
         const userId = payload.id;
         const token = getToken({ id: userId });
@@ -51,10 +44,12 @@ module.exports = (app) => {
   });
 
   app.get('/me', verifyUser, (req, res, next) => {
+    console.log(req.user);
     res.send(req.user);
   });
 
   app.get('/user/tickets', verifyUser, (req, res, next) => {
+    console.log('getting tickets');
     const id = req.user.id;
     Ticket.findAll({
       include: [

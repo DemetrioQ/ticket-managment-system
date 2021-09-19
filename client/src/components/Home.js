@@ -14,6 +14,7 @@ function Home(props) {
   const [deleting, setDeleting] = useState(false);
 
   const fetchUserDetails = useCallback(() => {
+    console.log('Getting User');
     Axios.get('/me', {
       withCredentials: true,
       // Pass authentication token as bearer token in header

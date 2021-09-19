@@ -7,7 +7,6 @@ function Nav() {
   const [userContext, setUserContext] = useContext(UserContext);
 
   const logoutHandler = () => {
-    console.log('logging out');
     Axios.get('/logout', {
       headers: {
         'Content-Type': 'application/json',
