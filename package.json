@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=productio node server/server.js",
+    "start": "NODE_ENV=production node server/server.js",
     "build": "cd client && npm install && npm run build --prod",
     "db:create": "cd server && sequelize-cli db:create",
     "db:migrate": "cd server && sequelize-cli db:migrate",
