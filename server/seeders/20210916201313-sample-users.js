@@ -51,11 +51,11 @@ module.exports = {
         priority: 'high',
       },
     ]);
-    
+
     const users = await queryInterface.sequelize.query('Select id from public."Users";');
 
     const userRows = users[0];
-    return await Ticket.bulkCreate([
+    return Ticket.bulkCreate([
       {
         user_id: userRows[0].id,
         priority_id: 1,
@@ -86,6 +86,6 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Tickets', null, {});
     await queryInterface.bulkDelete('Priorities', null, {});
-    return await queryInterface.bulkDelete('Users', null, {});
-  }
+    return queryInterface.bulkDelete('Users', null, {});
+  },
 };
