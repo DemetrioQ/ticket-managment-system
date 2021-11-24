@@ -1,9 +1,8 @@
-const passport = require('passport');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const JwtStrategy = require('passport-jwt').Strategy;
-ExtractJwt = require('passport-jwt').ExtractJwt;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models').User;
 
 const opts = {};
@@ -21,7 +20,6 @@ function initialize(passport) {
         console.log('false');
 
         return done(null, false);
-        // or you could create a new account
       }
     }).catch(err =>{
         return done(err, false)
