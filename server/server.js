@@ -5,11 +5,15 @@ const db = require('./models');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+
 require('dotenv').config('./env');
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+var routes = require('./routes/routes');
+var userRoutes = require('./routes/user.routes');
+var ticketRoutes = require('./routes/ticket.routes');
 
 db.sequelize.sync();
 
@@ -35,12 +39,14 @@ const corsOptions = {
 
   credentials: true,
 };
+app.use(passport.initialize());
 
 app.use(cors({ corsOptions }));
 
-app.use(passport.initialize());
+app.use('/', routes);
+app.use('/user', userRoutes);
+app.use('/ticket', ticketRoutes);
 
-require('./routes/routes')(app);
 
 app.listen(PORT, () => {
   console.log(`Server listeniong on ${PORT}`);
