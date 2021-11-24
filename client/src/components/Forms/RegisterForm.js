@@ -23,7 +23,8 @@ function RegisterForm() {
   const [userContext, setUserContext] = useContext(UserContext);
   const [open, setOpen] = React.useState(false);
 
-  const Register = () => {
+  const register = (event) => {
+    event.preventDefault();
     Axios.post(
       '/register',
       { username: userName, email: userEmail, password: userPassword },
@@ -34,7 +35,6 @@ function RegisterForm() {
         withCredentials: true,
       }
     )
-      // , {withCredentials: true, credentials: 'include'})
       .then(async (res) => {
         setOpen(true);
         setUserName('');
@@ -50,20 +50,6 @@ function RegisterForm() {
   };
 
   return (
-    // <>
-    //   <form className='auth-form'>
-    //     <FormGroup label='Username' labelFor='username'>
-    //       <InputGroup id='username' placeholder='Username' onChange={(e) => setUserName(e.target.value)} value={userName} />
-    //     </FormGroup>
-    //     <FormGroup label='Email' labelFor='email'>
-    //       <InputGroup id='email' type='email' placeholder='Email' onChange={(e) => setUserEmail(e.target.value)} value={userEmail} />
-    //     </FormGroup>
-    //     <FormGroup label='Password' labelFor='password'>
-    //       <InputGroup id='password' placeholder='Password' type='password' onChange={(e) => setUserPassword(e.target.value)} value={userPassword} />
-    //     </FormGroup>
-    //     <Button intent='primary' text='Register' fill type='submit' onClcik={Register} />
-    //   </form>
-    // </>
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
         <Collapse in={open}>
@@ -88,19 +74,19 @@ function RegisterForm() {
           <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
-          <Box component='form' noValidate sx={{ mt: 3 }}>
+          <Box component='form' onSubmit={register} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField onChange={(event) => setUserName(event.target.value)} value={userName} required fullWidth id='username' label='Username' name='username' autoComplete='username' />
               </Grid>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' name='email' autoComplete='email' />
+                <TextField onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' type='email' name='email' autoComplete='email' />
               </Grid>
               <Grid item xs={12}>
                 <TextField onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
               </Grid>
             </Grid>
-            <Button onClick={Register} fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign Up
             </Button>
           </Box>

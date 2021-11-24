@@ -8,21 +8,27 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import Fade from '@material-ui/core/Fade';
 
 const theme = createTheme();
 
 function LoginForm(props) {
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
   const [userContext, setUserContext] = useContext(UserContext);
-  const handleSubmit = (event) => {
+  const [open, setOpen] = React.useState(false);
+
+  const login = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
+
     axios
       .post(
         '/login',
-        { email: data.get('email'), password: data.get('password') },
+        { email: userEmail, password: userPassword },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -37,6 +43,7 @@ function LoginForm(props) {
         });
       })
       .catch((err) => {
+        setOpen(true);
         console.log(err);
       });
   };
@@ -44,6 +51,13 @@ function LoginForm(props) {
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
+        <Fade in={open} timeout={1000}>
+          <Collapse in={open}>
+            <Alert severity='error' variant='outlined'>
+              Incorrect username or password
+            </Alert>
+          </Collapse>
+        </Fade>
         <CssBaseline />
         <Box
           sx={{
@@ -56,11 +70,12 @@ function LoginForm(props) {
           <Typography component='h1' variant='h5'>
             Sign in
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField margin='normal' required fullWidth id='email' label='Email Address' name='email' autoComplete='email' autoFocus />
-            <TextField margin='normal' required fullWidth name='password' label='Password' type='password' id='password' autoComplete='current-password' />
+          <Box component='form' onSubmit={login} sx={{ mt: 1 }}>
+            <TextField margin='normal' onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' type='email' name='email' autoComplete='email' />
+
+            <TextField margin='normal' onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
+
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              {' '}
               Sign in
             </Button>
           </Box>
