@@ -92,7 +92,6 @@ function Home(props) {
     });
   };
   const updateTicket = (ticket) => {
-    console.log(ticket);
     Axios.put(
       '/ticket',
       { id: ticket.id, title: ticket.title, description: ticket.description, priority: ticket.priority },
