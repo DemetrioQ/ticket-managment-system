@@ -33,7 +33,7 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.box {
+.login-background-gradient {
   position: absolute;
   top: 0px;
   bottom: 0px;

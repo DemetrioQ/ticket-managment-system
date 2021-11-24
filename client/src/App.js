@@ -52,14 +52,12 @@ function App() {
       window.removeEventListener('storage', syncLogout);
     };
   }, [syncLogout]);
-  
-
 
   return userContext.token === undefined || userContext.token === null ? (
     <>
       <Switch>
         <Route path='/'>
-          <div className='box'></div>
+          <div className='login-background-gradient'></div>
           <Card elevation='1' className='centered'>
             <Tabs id='Tabs' onChange={setCurrentTab} selectedTabId={currentTab}>
               <Tab id='login' title='Login' panel={<LoginForm />} />
