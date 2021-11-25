@@ -21,7 +21,22 @@ exports.insertUser = (req, res) => {
       res.send({ success: true });
     })
     .catch((err) => {
-      res.status(500).send({
+      console.log(err.errors[0]);
+      if (err.errors[0].path == 'username') {
+        return res.status(409).send({
+          code: 'auth-01',
+          message: 'Username already registered',
+        });
+      }
+
+      if (err.errors[0].path == 'email') {
+        return res.status(409).send({
+          code: 'auth-02',
+          message: 'Email already registered',
+        });
+      }
+      
+      return res.status(500).send({
         message: err.message || 'Some error occurred while creating the User.',
       });
     });
