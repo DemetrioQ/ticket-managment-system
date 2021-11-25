@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,17 +11,18 @@ import { useState, useContext } from 'react';
 import Axios from 'axios';
 import { UserContext } from '../../context/UserContext';
 import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
 import Fade from '@material-ui/core/Fade';
 
 const theme = createTheme();
 
 function RegisterForm() {
+  const [userContext, setUserContext] = useContext(UserContext);
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [open, setOpen] = React.useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [errMessage, setErrMessage] = useState('');
 
   const register = (event) => {
     event.preventDefault();
@@ -37,7 +37,7 @@ function RegisterForm() {
       }
     )
       .then(async (res) => {
-        setOpen(true);
+        setIsValid(true);
         setUserName('');
         setUserEmail('');
         setUserPassword('');
@@ -46,27 +46,46 @@ function RegisterForm() {
         });
       })
       .catch((err) => {
-        console.log(err);
+        let data = err.response.data;
+        if (data.code) {
+          setErrMessage(data.message);
+          setIsInvalid(true);
+        }
       });
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
-        <Fade in={open} timeout={1000}>
-          <Alert
-            severity='success'
-            variant='outlined'
-            onClose={() => {
-              setOpen(false);
-            }}
-            sx={{ margin: 0 }}>
-            User registered
-          </Alert>
+        <Fade in={isValid || isInvalid} timeout={1000}>
+          <div>
+            <div id='alert-succes-register' style={{ display: isValid ? 'inline' : 'none' }}>
+              <Alert
+                severity='success'
+                variant='outlined'
+                onClose={() => {
+                  setIsValid(false);
+                }}
+                sx={{ margin: 0 }}>
+                User registered Successfully
+              </Alert>
+            </div>
+            <div id='alert-error-register' style={{ display: isInvalid ? 'inline' : 'none' }}>
+              <Alert
+                severity='error'
+                variant='outlined'
+                onClose={() => {
+                  setIsInvalid(false);
+                }}
+                sx={{ margin: 0 }}>
+                {errMessage}
+              </Alert>
+            </div>
+          </div>
         </Fade>
+
         <Box
           sx={{
-            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -78,13 +97,13 @@ function RegisterForm() {
           <Box component='form' onSubmit={register} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserName(event.target.value)} value={userName} required fullWidth id='username' label='Username' name='username' autoComplete='username' />
+                <TextField onChange={(event) => setUserName(event.target.value)} value={userName} required fullWidth label='Username' name='username' />
               </Grid>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' type='email' name='email' autoComplete='email' />
+                <TextField onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth label='Email Address' type='email' name='email' autoComplete='email' />
               </Grid>
               <Grid item xs={12}>
-                <TextField onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
+                <TextField onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' autoComplete='new-password' />
               </Grid>
             </Grid>
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
