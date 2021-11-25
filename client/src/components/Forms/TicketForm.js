@@ -10,7 +10,6 @@ import NativeSelect from '@mui/material/NativeSelect';
 
 const theme = createTheme();
 
-
 function TicketForm(props) {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
@@ -115,7 +114,7 @@ function TicketForm(props) {
               <option value={3}>Medium</option>
               <option value={4}>High</option>
             </NativeSelect>
-            <Button fullWidth variant='contained' style={{ 'margin-top': '10%' }} onClick={SubmitTicket}>
+            <Button fullWidth variant='contained' style={{ marginTop: '10%' }} onClick={SubmitTicket}>
               Submit
             </Button>
           </Box>
