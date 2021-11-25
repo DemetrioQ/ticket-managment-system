@@ -11,7 +11,6 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
 import Fade from '@material-ui/core/Fade';
 
 const theme = createTheme();
@@ -52,14 +51,15 @@ function LoginForm(props) {
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
         <Fade in={open} timeout={1000}>
-          <Alert severity='error' variant='outlined' sx={{ margin: 0 }}>
-            Incorrect username or password
-          </Alert>
+          <div id='alert-error-login' style={{ display: open ? 'inline' : 'none' }}>
+            <Alert severity='error' variant='outlined' sx={{ margin: 0 }}>
+              Incorrect username or password
+            </Alert>
+          </div>
         </Fade>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -69,9 +69,9 @@ function LoginForm(props) {
             Sign in
           </Typography>
           <Box component='form' onSubmit={login} sx={{ mt: 1 }}>
-            <TextField margin='normal' onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth id='email' label='Email Address' type='email' name='email' autoComplete='email' />
+            <TextField margin='normal' onChange={(event) => setUserEmail(event.target.value)} value={userEmail} required fullWidth label='Email Address' type='email' name='email' autoComplete='email' />
 
-            <TextField margin='normal' onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' id='password' autoComplete='new-password' />
+            <TextField margin='normal' onChange={(event) => setUserPassword(event.target.value)} value={userPassword} required fullWidth name='password' label='Password' type='password' autoComplete='new-password' />
 
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign in
