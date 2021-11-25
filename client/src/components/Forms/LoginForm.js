@@ -43,7 +43,6 @@ function LoginForm(props) {
       })
       .catch((err) => {
         setOpen(true);
-        console.log(err);
       });
   };
 

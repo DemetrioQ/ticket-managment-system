@@ -21,7 +21,6 @@ exports.insertUser = (req, res) => {
       res.send({ success: true });
     })
     .catch((err) => {
-      console.log(err.errors[0]);
       if (err.errors[0].path == 'username') {
         return res.status(409).send({
           code: 'auth-01',
