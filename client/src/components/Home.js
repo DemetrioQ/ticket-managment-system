@@ -12,7 +12,7 @@ function Home(props) {
   const [ticketForEdit, setTicketForEdit] = useState(null);
   const [tickets, setTickets] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  
+
   const fetchUserDetails = useCallback(() => {
     Axios.get('/me', {
       withCredentials: true,
@@ -156,7 +156,7 @@ function Home(props) {
     }
   });
 
-  return userContext.details === null ? (
+  return userContext.details == null ? (
     'Error Loading User details'
   ) : !userContext.details ? (
     <Loader />
