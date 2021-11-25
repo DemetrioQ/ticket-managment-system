@@ -53,7 +53,7 @@ function App() {
     };
   }, [syncLogout]);
 
-  return userContext.token === undefined || userContext.token === null ? (
+  return userContext.token == null ? (
     <>
       <Switch>
         <Route path='/'>
@@ -70,7 +70,7 @@ function App() {
     </>
   ) : userContext.token ? (
     <>
-      <Nav />
+    <Nav/>
       <Switch>
         <Route path='/home'>
           <Home refresh={verifyUser} />
