@@ -13,6 +13,7 @@ import Axios from 'axios';
 import { UserContext } from '../../context/UserContext';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
+import Fade from '@material-ui/core/Fade';
 
 const theme = createTheme();
 
@@ -52,17 +53,17 @@ function RegisterForm() {
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
-        <Collapse in={open}>
+        <Fade in={open} timeout={1000}>
           <Alert
             severity='success'
             variant='outlined'
             onClose={() => {
               setOpen(false);
-            }}>
+            }}
+            sx={{ margin: 0 }}>
             User registered
           </Alert>
-        </Collapse>
-        <CssBaseline />
+        </Fade>
         <Box
           sx={{
             marginTop: 8,

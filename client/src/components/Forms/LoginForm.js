@@ -52,11 +52,9 @@ function LoginForm(props) {
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
         <Fade in={open} timeout={1000}>
-          <Collapse in={open}>
-            <Alert severity='error' variant='outlined'>
-              Incorrect username or password
-            </Alert>
-          </Collapse>
+          <Alert severity='error' variant='outlined' sx={{ margin: 0 }}>
+            Incorrect username or password
+          </Alert>
         </Fade>
         <CssBaseline />
         <Box
