@@ -13,8 +13,8 @@ function App() {
   const [currentTab, setCurrentTab] = useState('login');
   const [userContext, setUserContext] = useContext(UserContext);
 
-  const verifyUser = useCallback(() => {
-    Axios.post('/refreshToken', {
+  const verifyUser = useCallback(async () => {
+    const resp = await Axios.post('/refreshToken', {
       withCredentials: true,
       // Pass authentication token as bearer token in header
       headers: {
@@ -53,37 +53,44 @@ function App() {
     };
   }, [syncLogout]);
 
-  return userContext.token == null ? (
+  if (userContext.token == null) {
+    return (
+      <>
+        <Redirect
+          to={{
+            pathname: '/',
+          }}
+        />
+        <Switch>
+          <Route path='/'>
+            <div className='login-background-gradient'></div>
+            <Card elevation='1' className='centered'>
+              <Tabs id='Tabs' onChange={setCurrentTab} selectedTabId={currentTab}>
+                <Tab id='login' title='Login' panel={<LoginForm />} />
+                <Tab id='register' title='Register' panel={<RegisterForm />} />
+                <Tabs.Expander />
+              </Tabs>
+            </Card>
+          </Route>
+        </Switch>
+      </>
+    );
+  }
+
+  return (
     <>
-      <Switch>
-        <Route path='/'>
-          <div className='login-background-gradient'></div>
-          <Card elevation='1' className='centered'>
-            <Tabs id='Tabs' onChange={setCurrentTab} selectedTabId={currentTab}>
-              <Tab id='login' title='Login' panel={<LoginForm />} />
-              <Tab id='register' title='Register' panel={<RegisterForm />} />
-              <Tabs.Expander />
-            </Tabs>
-          </Card>
-        </Route>
-      </Switch>
-    </>
-  ) : userContext.token ? (
-    <>
-    <Nav/>
-      <Switch>
-        <Route path='/home'>
-          <Home refresh={verifyUser} />
-        </Route>
-      </Switch>
       <Redirect
         to={{
           pathname: '/home',
         }}
       />
+      <Nav />
+      <Switch>
+        <Route path='/home'>
+          <Home refresh={verifyUser} />
+        </Route>
+      </Switch>
     </>
-  ) : (
-    <Loader />
   );
 }
 
