@@ -47,7 +47,10 @@ app.use('/', routes);
 app.use('/user', userRoutes);
 app.use('/ticket', ticketRoutes);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build/index.html'));
+});
 
 app.listen(PORT, () => {
-  console.log(`Server listeniong on ${PORT}`);
+  console.log(`Server listening on port: ${PORT}`);
 });

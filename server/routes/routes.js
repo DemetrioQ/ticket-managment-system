@@ -48,5 +48,4 @@ router.get('/logout', verifyUser, (req, res, next) => {
   res.send({ success: true });
 });
 
-
 module.exports = router;
