@@ -202,7 +202,12 @@ function Home(props) {
                         }}>
                         Edit
                       </Button>
-                      <Button onClick={() => deleteTicket(ticket.id)} className='btn btn-sm btn-danger' disabled={deleting}>
+                      <Button
+                        onClick={() => {
+                          if (window.confirm('Are you sure you wish to delete this ticket?')) deleteTicket(ticket.id);
+                        }}
+                        className='btn btn-sm btn-danger'
+                        disabled={deleting}>
                         {deleting ? <span className='spinner-border spinner-border-sm'></span> : <span>Delete</span>}
                       </Button>
                     </td>

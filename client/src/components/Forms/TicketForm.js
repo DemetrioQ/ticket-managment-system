@@ -10,7 +10,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 
 const theme = createTheme();
 
-function TicketForm(props) {
+function TicketForm({addOrEdit, ticketForEdit}) {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -18,7 +18,6 @@ function TicketForm(props) {
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
 
-  const { addOrEdit, ticketForEdit } = props;
 
   const SubmitTicket = () => {
     if (titleError || descriptionError) {

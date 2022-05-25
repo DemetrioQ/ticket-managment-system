@@ -51,7 +51,7 @@ exports.updateTicket = (req, res) => {
     }
   ).catch((err) => {
     res.status(500).send({
-      message: err.message || 'Some error occurred while creating the ticket.',
+      message: err.message || 'Some error occurred while updating the ticket.',
     });
   });
 };
@@ -74,7 +74,7 @@ exports.deleteTicket = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || 'Some error occurred while creating the ticket.',
+        message: err.message || 'Some error occurred while deleting the ticket.',
       });
     });
 };
