@@ -1,4 +1,5 @@
 # Ticket Managment System
+(Note: Only client side ticket creation is done)
 
 Demo: https://ticket-managment-system.herokuapp.com/
 
